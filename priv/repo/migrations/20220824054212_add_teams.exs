@@ -2,15 +2,19 @@ defmodule Ff1.Repo.Migrations.AddDrivers do
   use Ecto.Migration
 
   def change do
-    Ff1.Repo.insert!(%Ff1.Ff1.Team{team_name: "Red Bull Racing RBPT" })
-    Ff1.Repo.insert!(%Ff1.Ff1.Team{team_name: "Ferrari" })
-    Ff1.Repo.insert!(%Ff1.Ff1.Team{team_name: "Mercedes" })
-    Ff1.Repo.insert!(%Ff1.Ff1.Team{team_name: "Alpine Renault" })
-    Ff1.Repo.insert!(%Ff1.Ff1.Team{team_name: "McLaren Mercedes" })
-    Ff1.Repo.insert!(%Ff1.Ff1.Team{team_name: "Alfa Romeo Ferrari" })
-    Ff1.Repo.insert!(%Ff1.Ff1.Team{team_name: "Haas Ferrari" })
-    Ff1.Repo.insert!(%Ff1.Ff1.Team{team_name: "AlphaTauri RBPT" })
-    Ff1.Repo.insert!(%Ff1.Ff1.Team{team_name: "Aston Martin Aramco Mercedes" })
-    Ff1.Repo.insert!(%Ff1.Ff1.Team{team_name: "Williams Mercedes" })
+    execute("""
+      insert into teams (team_name, inserted_at, updated_at) 
+      values 
+        ('Red Bull Racing RBPT', now(), now()),
+        ('Ferrari', now(), now()),
+        ('Mercedes', now(), now()),
+        ('Alpine Renault', now(), now()),
+        ('McLaren Mercedes', now(), now()),
+        ('Alfa Romeo Ferrari', now(), now()),
+        ('Haas Ferrari', now(), now()),
+        ('AlphaTauri RBPT', now(), now()),
+        ('Aston Martin Aramco Mercedes', now(), now()),
+        ('Williams Mercedes', now(), now());
+    """)
   end
 end
