@@ -15,9 +15,15 @@ defmodule Ff1Web.Router do
   end
 
   scope "/", Ff1Web do
-    pipe_through :browser
+    pipe_through [:browser]
 
     get "/", PageController, :index
+    live "/overview", :index
+  end
+
+  def instrospec(conn, _otps) do
+    IO.inspect(conn)
+    conn
   end
 
   # Other scopes may use custom stacks.

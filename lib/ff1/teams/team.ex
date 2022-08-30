@@ -1,4 +1,4 @@
-defmodule Ff1.Ff1.Team do
+defmodule Ff1.Teams.Team do
   use Ecto.Schema
   import Ecto.Changeset
 

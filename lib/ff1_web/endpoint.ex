@@ -43,8 +43,16 @@ defmodule Ff1Web.Endpoint do
     pass: ["*/*"],
     json_decoder: Phoenix.json_library()
 
+  def instrospec(conn, _otps) do
+    IO.puts "Printing out connection"
+    IO.inspect(conn)
+    conn
+  end
+
+  #plug :instrospec
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options
+  plug Pow.Plug.Session, otp_app: :ff1
   plug Ff1Web.Router
 end

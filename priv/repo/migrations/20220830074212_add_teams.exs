@@ -1,4 +1,4 @@
-defmodule Ff1.Repo.Migrations.AddDrivers do
+defmodule Ff1.Repo.Migrations.AddTeams do
   use Ecto.Migration
 
   def change do
