@@ -53,6 +53,5 @@ defmodule Ff1Web.Endpoint do
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options
-  plug Pow.Plug.Session, otp_app: :ff1
   plug Ff1Web.Router
 end

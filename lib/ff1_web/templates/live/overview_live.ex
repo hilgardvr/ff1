@@ -1,4 +1,4 @@
-defmodule Ff1Web.LiveOverview do
+defmodule Ff1Web.OverviewLive do
   use Ff1Web, :live_view
 
   def render(assigns) do

@@ -18,7 +18,7 @@ defmodule Ff1Web.Router do
     pipe_through [:browser]
 
     get "/", PageController, :index
-    live "/overview", :index
+    live "/overview", Ff1Web.OverviewLive
   end
 
   def instrospec(conn, _otps) do
