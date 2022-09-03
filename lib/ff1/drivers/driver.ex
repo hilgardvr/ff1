@@ -16,4 +16,8 @@ defmodule Ff1.Drivers.Driver do
     |> cast(attrs, [:driver_name, :driver_price, :team])
     |> validate_required([:driver_name, :driver_price, :team])
   end
+
+  def get_all_drivers() do
+    Ff1.Repo.all(Ff1.Drivers.Driver)
+  end
 end
