@@ -98,27 +98,34 @@ defmodule Ff1Web.OverviewLive do
     """
   end
 
+  def handle_event("save_player_team", assigns, socket) do
+    IO.inspect(assigns)
+    {:noreply, socket}
+  end
+
   defp display_driver_select(assigns) do
     num_drivers = @number_drivers
     all_drivers = @all_drivers
     ~H"""
-    <form phx-change="driver-selected" phx-submit="save">
+    <form phx-change="driver-selected" phx-submit="save_player_team">
       <%= for i <- 1..num_drivers do %>
-        <label>Driver <%= i %>:</label>
-        <select name={"#{i}"} id={"#{i}"}>
-          <option 
-            disabled 
-            selected={!Map.has_key?(assigns.drivers_selected, "#{i}")} 
-            value>-- select a driver --</option>
-          <%= for driver <- filter_selected_drivers(i, assigns.drivers_selected) do %>
-            <option 
-              value={driver.id} 
-              selected={is_selected(assigns.drivers_selected, "#{i}", driver.id)}>
-            <%= display_driver(assigns, driver) %>
-            </option>
-          <% end %>
-        </select>
+      <label>Driver <%= i %>:</label>
+      <select name={"#{i}"} id={"#{i}"}>
+        <option 
+          disabled 
+          selected={!Map.has_key?(assigns.drivers_selected, "#{i}")} 
+          value>-- select a driver --</option>
+        <%= for driver <- filter_selected_drivers(i, assigns.drivers_selected) do %>
+        <option 
+          value={driver.id} 
+          selected={is_selected(assigns.drivers_selected, "#{i}", driver.id)}>
+        <%= display_driver(assigns, driver) %>
+        </option>
+        <% end %>
+      </select>
       <% end %>
+      <br>
+      <%= submit "Save" %>
     </form>
     """
   end
