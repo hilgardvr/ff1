@@ -1,4 +1,4 @@
-defmodule Ff1.Accounts.Player do
+defmodule Ff1.Players.Player do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -28,7 +28,7 @@ defmodule Ff1.Accounts.Player do
   end
 
   def get_player_by_id(id) do
-     Repo.get(FF1.Player, id)
+     Ff1.Repo.get!(FF1.Player, id)
   end
 
 end
