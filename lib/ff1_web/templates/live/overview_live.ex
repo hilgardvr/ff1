@@ -28,11 +28,13 @@ defmodule Ff1Web.OverviewLive do
  # end
 
   def handle_event("save_account", %{"account" => params}, socket) do
+    IO.puts("save_account")
     IO.inspect(params)
     case Account.create_account(params) do 
-      {:ok, account} -> 
-        acc = Account.create_account(account) 
-        socket = socket.assign(socket, :account_id, acc.id)
+      {:ok, acc} -> 
+        IO.puts("account created")
+        IO.inspect(acc)
+        socket = assign(socket, :account_id, acc.id)
         {:noreply, socket}
       {:error, %Ecto.Changeset{} = changeset} -> 
         {:noreply, assign(socket, changeset: changeset)}
@@ -53,7 +55,7 @@ defmodule Ff1Web.OverviewLive do
   def handle_event("validate_account", params, socket) do 
     changeset = %Account{}
       |> Account.changeset(params)
-    socket = assign(socket, :changeset, changeset)
+    #socket = assign(socket, :changeset, changeset)
     {:noreply, socket}
   end
 
@@ -75,7 +77,7 @@ defmodule Ff1Web.OverviewLive do
   end
 
   def render(assigns) do
-    if (assigns.player_id == 0) do
+    if (assigns.account_id == 0) do
       #player = Player.get_player_by_id(assigns.player_id)
       display_signup(assigns)
     else

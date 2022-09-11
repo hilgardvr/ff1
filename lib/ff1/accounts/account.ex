@@ -22,5 +22,6 @@ defmodule Ff1.Accounts.Account do
   def create_account(account) do
     changeset(%Ff1.Accounts.Account{}, account)
     |> Ff1.Repo.insert()
+    |> IO.inspect()
   end
 end
