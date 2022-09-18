@@ -1,42 +1,39 @@
 defmodule Ff1Web.OverviewLive do
   use Ff1Web, :live_view
   alias Ff1.Players.Player
-  alias Ff1.Accounts.Account
 
   @number_drivers 4
   @budget 1000000
-  
+
   def mount(_param, _session, socket) do
     socket = socket
       |> assign(:drivers_selected, %{})
       |> assign(:account_id, 0)
       |> assign(:player_id, 0)
-      |> assign(:changeset, Account.changeset(%Account{}, %{}))
     {:ok, socket}
   end
 
   def update_drivers_selected(socket, params) do
     target = hd(Map.fetch!(params, "_target"))
     value = Map.fetch!(params, target)
-    Map.put(socket.assigns.drivers_selected, target, value) 
+    Map.put(socket.assigns.drivers_selected, target, value)
   end
 
  # def handle_event("submit", params, socket) do
  #   IO.puts "Hilla"
- #   
+ #
  #   {:noreply, socket}
  # end
 
   def handle_event("save_account", %{"account" => params}, socket) do
-    IO.puts("save_account")
     IO.inspect(params)
-    case Account.create_account(params) do 
-      {:ok, acc} -> 
+    case Account.create_account(params) do
+      {:ok, acc} ->
         IO.puts("account created")
         IO.inspect(acc)
         socket = assign(socket, :account_id, acc.id)
         {:noreply, socket}
-      {:error, %Ecto.Changeset{} = changeset} -> 
+      {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
     end
   end
@@ -52,41 +49,12 @@ defmodule Ff1Web.OverviewLive do
     {:noreply, socket}
   end
 
-  def handle_event("validate_account", params, socket) do 
-    changeset = %Account{}
-      |> Account.changeset(params)
-    #socket = assign(socket, :changeset, changeset)
-    {:noreply, socket}
-  end
-
-  def display_signup(assigns) do
-    ~H"""
-      <h1>FF1</h1>
-      <.form let={f} for={@changeset} phx-change="validate_account" phx-submit="save_account">
-        <%= label f, :email %>
-        <%= text_input f, :email %>
-        <%= error_tag f, :email %>
-
-        <%= label f, :password_hash %>
-        <%= text_input f, :password_hash %>
-        <%= error_tag f, :password_hash %>
-        
-        <%= submit "Save" %>
-      </.form>
-    """
-  end
-
   def render(assigns) do
-    if (assigns.account_id == 0) do
-      #player = Player.get_player_by_id(assigns.player_id)
-      display_signup(assigns)
-    else
       ~H"""
         <h1>Pick drivers</h1>
         <%= display_budget(assigns) %>
         <%= display_driver_select(assigns) %>
       """
-    end
   end
 
   defp all_drivers() do
@@ -114,7 +82,7 @@ defmodule Ff1Web.OverviewLive do
 
   defp display_budget(assigns) do
     all_drivers = all_drivers()
-    spent = Enum.reduce assigns.drivers_selected, 0, fn x, acc -> 
+    spent = Enum.reduce assigns.drivers_selected, 0, fn x, acc ->
       {_driver_number, driver_id} = x
       {id, _res} = Integer.parse(driver_id)
       driver = hd Enum.filter(all_drivers, fn x -> x.id == id end)
@@ -151,13 +119,13 @@ defmodule Ff1Web.OverviewLive do
       <%= for i <- 1..num_drivers do %>
       <label>Driver <%= i %>:</label>
       <select name={"#{i}"} id={"#{i}"}>
-        <option 
-          disabled 
-          selected={!Map.has_key?(assigns.drivers_selected, "#{i}")} 
+        <option
+          disabled
+          selected={!Map.has_key?(assigns.drivers_selected, "#{i}")}
           value>-- select a driver --</option>
         <%= for driver <- filter_selected_drivers(i, assigns.drivers_selected) do %>
-        <option 
-          value={driver.id} 
+        <option
+          value={driver.id}
           selected={is_selected(assigns.drivers_selected, "#{i}", driver.id)}>
         <%= display_driver(assigns, driver) %>
         </option>
@@ -173,25 +141,25 @@ defmodule Ff1Web.OverviewLive do
   defp is_selected(selected_drivers, driver_number, driver_id) do
     case selected_drivers[driver_number] do
       nil -> false
-      num -> 
-        {parsed, _res} = Integer.parse(num) 
+      num ->
+        {parsed, _res} = Integer.parse(num)
         parsed == driver_id
     end
   end
 
   defp filter_selected_drivers(i, drivers_selected) do
     all_drivers = all_drivers()
-    drivers_to_int = Enum.map(drivers_selected, fn {index, driver_id} -> 
+    drivers_to_int = Enum.map(drivers_selected, fn {index, driver_id} ->
       {parsed_index, _res} = Integer.parse(index)
       {parsed_id, _res} = Integer.parse(driver_id)
       {parsed_index, parsed_id}
     end)
-    drivers_to_remove = Enum.filter(drivers_to_int, fn {index, _driver_id} -> 
+    drivers_to_remove = Enum.filter(drivers_to_int, fn {index, _driver_id} ->
       index != i
     end)
     drivers_to_remove_ids = Enum.map(
-      drivers_to_remove, 
-      fn {_index, driver_id} -> driver_id 
+      drivers_to_remove,
+      fn {_index, driver_id} -> driver_id
     end)
     Enum.filter(all_drivers, fn driver ->
       !Enum.member?(drivers_to_remove_ids, driver.id) end)
